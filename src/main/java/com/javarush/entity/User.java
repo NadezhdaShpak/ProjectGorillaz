@@ -1,4 +1,4 @@
-package com.javarush.khmelov.entity;
+package com.javarush.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,7 +20,8 @@ public class User {
     private Role role;
 
     public String getImage() { //TODO move to DTO
-        return "image-" + id;
+        if (id < 10) return "user-0" + id;
+        return "user-" + id;
     }
 
 }

@@ -1,4 +1,4 @@
-package com.javarush.khmelov.entity;
+package com.javarush.entity;
 
 public enum Role {
     USER, ADMIN, GUEST

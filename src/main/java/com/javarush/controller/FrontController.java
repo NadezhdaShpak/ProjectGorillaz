@@ -1,10 +1,11 @@
-package com.javarush.khmelov.controller;
+package com.javarush.controller;
 
-import com.javarush.khmelov.cmd.Command;
-import com.javarush.khmelov.config.Winter;
-import com.javarush.khmelov.entity.Role;
+import com.javarush.cmd.Command;
+import com.javarush.config.Winter;
+import com.javarush.entity.Role;
 import jakarta.servlet.ServletConfig;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -12,7 +13,8 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 
-@WebServlet({"", "/home", "/list-user", "/edit-user"})
+@WebServlet({"", "/home", "/list-user", "/edit-user", "/users-profile", "/signup", "/login", "/logout"})
+@MultipartConfig (fileSizeThreshold = 1 << 20)
 public class FrontController extends HttpServlet {
 
     private final HttpResolver httpResolver = Winter.find(HttpResolver.class);
