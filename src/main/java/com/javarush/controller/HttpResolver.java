@@ -2,6 +2,7 @@ package com.javarush.controller;
 
 import com.javarush.cmd.Command;
 import com.javarush.config.Winter;
+import com.javarush.util.Go;
 import jakarta.servlet.http.HttpServletRequest;
 
 public class HttpResolver {
@@ -10,7 +11,7 @@ public class HttpResolver {
         //   /cmd-example
         try {
             String requestURI = request.getRequestURI();
-            requestURI = requestURI.equals("/") ? "/start-page" : requestURI;
+            requestURI = requestURI.equals("/") ? Go.HOME : requestURI;
             String kebabName = requestURI.split("[?#/]")[1];
             String simpleName = convertKebabStyleToCamelCase(kebabName);
             String fullName = Command.class.getPackageName() + "." + simpleName;

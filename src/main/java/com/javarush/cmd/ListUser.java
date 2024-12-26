@@ -2,6 +2,7 @@ package com.javarush.cmd;
 
 import com.javarush.entity.User;
 import com.javarush.service.UserService;
+import com.javarush.util.Constant;
 import jakarta.servlet.http.HttpServletRequest;
 
 import java.util.Collection;
@@ -18,7 +19,7 @@ public class ListUser implements Command {
     @Override
     public String doGet(HttpServletRequest request) {
         Collection<User> users = userService.getAll();
-        request.setAttribute("users", users);
+        request.setAttribute(Constant.USERS, users);
         return getView();
     }
 

@@ -4,6 +4,7 @@ import com.javarush.entity.Role;
 import com.javarush.entity.User;
 import com.javarush.service.ImageService;
 import com.javarush.service.UserService;
+import com.javarush.util.Constant;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
@@ -20,13 +21,13 @@ public class UsersProfile implements Command {
 
     @Override
     public String doGet(HttpServletRequest req) {
-        String stringId = req.getParameter("id");
-        if (req.getParameter("id") != null) {
-            long id = Long.parseLong(req.getParameter("id"));
+        String stringId = req.getParameter(Constant.ID);
+        if (req.getParameter(Constant.ID) != null) {
+            long id = Long.parseLong(req.getParameter(Constant.ID));
             Optional<User> optionalUser = userService.get(id);
             if (optionalUser.isPresent()) {
                 User user = optionalUser.get();
-                req.setAttribute("user", user);
+                req.setAttribute(Constant.USER, user);
             }
         }
         return getView();
@@ -36,8 +37,8 @@ public class UsersProfile implements Command {
     @SneakyThrows
     public String doPost(HttpServletRequest req) {
         User user = User.builder()
-                .login(req.getParameter("login"))
-                .role(Role.valueOf(req.getParameter("role")))
+                .login(req.getParameter(Constant.LOGIN))
+                .role(Role.valueOf(req.getParameter(Constant.ROLE)))
                 .build();
 
         return getView() + "?id=" + user.getId();

@@ -4,6 +4,8 @@ import com.javarush.entity.Role;
 import com.javarush.entity.User;
 import com.javarush.service.ImageService;
 import com.javarush.service.UserService;
+import com.javarush.util.Constant;
+import com.javarush.util.Go;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.AllArgsConstructor;
@@ -14,7 +16,6 @@ import org.apache.logging.log4j.Logger;
 @SuppressWarnings("unused")
 @AllArgsConstructor
 public class Signup implements Command {
-    private static final Logger log = LogManager.getLogger(Signup.class);
     private final UserService userService;
     private final ImageService imageService;
 
@@ -22,16 +23,16 @@ public class Signup implements Command {
     @SneakyThrows
     public String doPost(HttpServletRequest req) {
         User user = User.builder()
-                .login(req.getParameter("login"))
-                .password(req.getParameter("password"))
+                .login(req.getParameter(Constant.LOGIN))
+                .password(req.getParameter(Constant.PASSWORD))
                 .role(Role.USER)
                 .build();
         userService.create(user);
         imageService.uploadImage(req, user.getImage());
         HttpSession session = req.getSession();
 
-        session.setAttribute("user", user);
+        session.setAttribute(Constant.USER, user);
 
-        return "/users-profile?id=" + user.getId();
+        return Go.PROFILE + "?id=" + user.getId();
     }
 }

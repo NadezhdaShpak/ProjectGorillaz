@@ -3,6 +3,7 @@ package com.javarush.controller;
 import com.javarush.cmd.Command;
 import com.javarush.config.Winter;
 import com.javarush.entity.Role;
+import com.javarush.util.Go;
 import jakarta.servlet.ServletConfig;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
@@ -13,7 +14,10 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 
-@WebServlet({"", "/home", "/list-user", "/edit-user", "/users-profile", "/signup", "/login", "/logout"})
+@WebServlet({Go.INDEX, Go.HOME,
+        Go.SIGNUP, Go.LOGIN, Go.LOGOUT,
+        Go.LIST_USER, Go.PROFILE, Go.EDIT_USER,
+        Go.CREATE, Go.QUEST, Go.PLAY_GAME})
 @MultipartConfig (fileSizeThreshold = 1 << 20)
 public class FrontController extends HttpServlet {
 
