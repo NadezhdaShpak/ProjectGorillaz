@@ -1,12 +1,20 @@
 package com.javarush.entity;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
 public class Answer {
-    private String message;
+    private String text;
     private boolean win;
+    private Long id;
 
-
-    public Answer(String message, boolean win) {
-        this.message = message;
-            this.win = win;
+    public Answer(String text, boolean win, Long id) {
+        this.id = id;
+        this.text = text;
+        this.win = win;
     }
 }

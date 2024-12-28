@@ -3,6 +3,7 @@ package com.javarush.cmd;
 import com.javarush.entity.Answer;
 import com.javarush.entity.Quest;
 import com.javarush.entity.Question;
+import com.javarush.entity.User;
 import com.javarush.service.ImageService;
 import com.javarush.service.QuestService;
 import com.javarush.util.Constant;
@@ -25,70 +26,60 @@ public class CreateQuest implements Command {
     private final ImageService imageService;
     private QuestService questService;
 
-    public String doGet(HttpServletRequest request)  {
-        List<String> questions = (List<String>) request.getSession().getAttribute("questsQuestions");
-        if (questions == null) {
-            questions = new ArrayList<>();
-            request.getSession().setAttribute("questsQuestions", questions);
-        }
 
-        // Подготовка данных для отображения на JSP странице
-        request.setAttribute("questions", questions);
-
-        return Go.CREATE;
-    }
-
-
-    public String doPost(HttpServletRequest req)  {
+    public String doPost(HttpServletRequest req) {
         HttpSession session = req.getSession();
+        User currentUser = (User) req.getSession().getAttribute(Constant.USER);
 
         String questsName = req.getParameter("name");
         String description = req.getParameter("description");
-        try {
-            imageService.uploadImage(req, req.getParameter("image"));
-        } catch (IOException | ServletException e) {
-            throw new RuntimeException(e);
-        }
+
 //        Long id = (Long) session.getAttribute(Constant.ID);
         String winMessage = req.getParameter("winMessage");
         String looseMessage = req.getParameter("looseMessage");
 
         // Determine the number of questions
-        int numQuestions = 0;
-        while (req.getParameter("question" + numQuestions) != null) {
-            numQuestions++;
-        }
+
 
         Collection<Question> questsQuestions = new ArrayList<>();
+        int i = 1;
+        while (req.getParameter(Constant.QUESTION + i) != null) {
+            log.info("question{} is empty {}", i, req.getParameter(Constant.QUESTION + i).isEmpty());
+            String questionText = req.getParameter(Constant.QUESTION + i);
+            log.info("question is {}", questionText);
 
-        for (int i = 0; i < numQuestions; i++) {
-            String questionText = req.getParameter("question" + i);
             ArrayList<Answer> answers = new ArrayList<>();
-            answers.add(new Answer(req.getParameter("answerWin" + i), true));
-            answers.add(new Answer(req.getParameter("answerLoose" + i), false));
-            questsQuestions.add(new Question(questionText, answers));
+            answers.add(new Answer(req.getParameter(Constant.ANSWER_WIN + i), true, 1L));
+            log.info("answer win is {}", req.getParameter(Constant.ANSWER_WIN + i));
+            answers.add(new Answer(req.getParameter(Constant.ANSWER_LOOSE + i), false, 2L));
+            log.info("answer loose is {}", req.getParameter(Constant.ANSWER_LOOSE + i));
+            questsQuestions.add(new Question(questionText, answers, Long.valueOf(i)));
+            i++;
         }
-        if (req.getSession().getAttribute("questsQuestions") != null) {
-            List<String> questions = (List<String>) req.getSession().getAttribute("questsQuestions");
-        }
+        questsQuestions.forEach(question -> {
+            log.info(question.getText());
+            log.info(question.getAnswers().toArray());
+            System.out.println();
+        });
         Quest quest = Quest.builder()
                 .name(questsName)
                 .description(description)
+                .authorId(currentUser.getId())
                 .questions(questsQuestions)
                 .winMessage(winMessage)
                 .looseMessage(looseMessage)
                 .build();
         questService.create(quest);
-        log.info(quest);
-        log.info(quest.getId());
-        log.info(quest.getAuthorId());
-        log.info(quest.getDescription());
-        log.info(quest.getQuestions());
+        log.info("{} created", quest.getName());
+        try {
+            imageService.uploadImage(req, quest.getImage());
+        } catch (IOException | ServletException e) {
+            throw new RuntimeException(e);
+        }
+        log.info("questions {}", quest.getQuestions().toArray());
 
         session.setAttribute(Constant.QUEST, quest);
 
-
-
-        return Go.CREATE;
+        return Go.QUEST + "?id=" + quest.getId();
     }
 }

@@ -2,8 +2,10 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
 <c:import url="parts/header.jsp"/>
-
 <body>
+<script>
+    let id = 2;
+</script>
 <div class="container">
     <form class="form-horizontal" method="post" enctype="multipart/form-data">
 
@@ -33,7 +35,22 @@
             <input name="description" type="text" class="form-control" id="quest-description"
                    placeholder="Укажите описание квеста">
         </div>
-<%--        <h2>Сколько вопросов в квесте?</h2>--%>
+        <h2>Введите вопрос и ответы</h2>
+        <div id="questions">
+            <c:if test="${empty sessionScope.questsQuestions}">
+                Вопрос №1: <input type="text" name="question1" /> <br/>
+                Правильный ответ: <input type="text" name="answerWin1" /> <br/>
+                Неправильный ответ: <input type="text" name="answerLoose1" /> <br/><br/>
+            </c:if>
+        </div>
+        <label for="questionsCount">Сколько вопросов будет в квесте?</label>
+        <select id="questionsCount" onchange="addQuestion()">
+            <option value=""></option>
+            <option value="5">5</option>
+            <option value="10">10</option>
+            <option value="20">20</option>
+            <option value="30">30</option>
+        </select>
 
         <div class="mb-3">
             <label for="winMessage" class="form-label">Текст после выигрыша</label>
@@ -46,41 +63,25 @@
             <input name="looseMessage" type="text" class="form-control" id="looseMessage"
                    placeholder="Укажите текст проигрыша">
         </div>
-        <h2>Введите вопрос и ответы</h2>
-        <div id="questions">
-            <c:if test="${not empty sessionScope.questsQuestions}">
-                <c:forEach var="question"
-                           items="${sessionScope.questsQuestions}" varStatus="loop">
-                    Вопрос: <input type="text" name="question${loop.index}" value="${question}"/><br/>
-                    Правильный ответ: <input type="text" name="answerWin${loop.index}"/><br/>
-                    Неправильный ответ: <input type="text" name="answerLoose${loop.index}"/><br/><br/>
-                </c:forEach>
-            </c:if>
-            <c:if test="${empty sessionScope.questsQuestions}">
-                Вопрос: <input type="text" name="question0" /> <br/>
-                Правильный ответ: <input type="text" name="answerWin0" /> <br/>
-                Неправильный ответ: <input type="text" name="answerLoose0" /> <br/><br/>
-            </c:if>
-        </div>
 
-        <button class="btn btn-primary d-block w-20" onclick="addQuestion()">Добавить еще один вопрос</button>
 
-        <%
-            int id = 0;
-            if (session.getAttribute("questsQuestions") != null) {
-                id = ((List<String>) session.getAttribute("questsQuestions")).size();
-            }
-        %>
+
+
 
         <script>
-            let id = <%= id %>;
             function addQuestion() {
-                var questionDiv = document.createElement('div');
-                questionDiv.innerHTML = 'Вопрос №' + (id + 1) + ': <input type="text" name="question' + id + '" /> <br/>' +
-                    'Правильный ответ: <input type="text" name="answerWin' + id + '" /> <br/>' +
-                    'Неправильный ответ: <input type="text" name="answerLoose' + id + '" /> <br/>';
-                document.getElementById('questions').appendChild(questionDiv);
-                id++;
+                let questionsCount = $("#questionsCount").val();
+                if (questionsCount == null) {
+                    questionsCount = 5;
+                }
+                while (id <= questionsCount) {
+                    let questionDiv = document.createElement('div');
+                    questionDiv.innerHTML = 'Вопрос №' + id + ': <input type="text" name="question' + id + '" /> <br/>' +
+                        'Правильный ответ: <input type="text" name="answerWin' + id + '" /> <br/>' +
+                        'Неправильный ответ: <input type="text" name="answerLoose' + id + '" /> <br/>';
+                    document.getElementById('questions').appendChild(questionDiv);
+                    id++;
+                }
             }
         </script>
 

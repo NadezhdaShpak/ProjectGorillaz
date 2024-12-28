@@ -11,7 +11,7 @@ public class Constant {
 
     public static final String QUESTION = "question";
     public static final String ANSWER_WIN = "answerWin";
-    public static final String ANSWER_LOOSE = "answerLose";
+    public static final String ANSWER_LOOSE = "answerLoose";
     public static final String DESCRIPTION = "description";
     public static final String IMAGE = "image";
     public static final String ID = "id";
@@ -21,4 +21,5 @@ public class Constant {
 
     public static final String QUEST = "quest";
     public static final String QUESTS = "quests";
+    public static final String QUESTIONS = "questions";
 }

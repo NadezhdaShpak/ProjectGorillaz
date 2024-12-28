@@ -1,20 +1,26 @@
 package com.javarush.entity;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.util.ArrayList;
 import java.util.Collection;
-
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Question {
     private Collection<Answer> answers;
-    private Long id = 1L;
     private String text;
-    private Long nextQuestionId = id + 1L;
+    private Long id;
 
-    public Question(String text, Collection<Answer> answers) {
+
+    public Question(String text, Collection<Answer> answers, Long id) {
         this.text = text;
         this.answers = answers;
-        id++;
-
-        nextQuestionId++; //???
+        this.id = id;
         }
 
 
