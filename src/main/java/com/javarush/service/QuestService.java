@@ -1,9 +1,7 @@
 package com.javarush.service;
 
 import com.javarush.entity.Quest;
-import com.javarush.entity.User;
 import com.javarush.repository.QuestRepository;
-import com.javarush.repository.UserRepository;
 
 import java.util.Collection;
 import java.util.Optional;

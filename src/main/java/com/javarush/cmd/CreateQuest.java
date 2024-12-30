@@ -31,36 +31,29 @@ public class CreateQuest implements Command {
         HttpSession session = req.getSession();
         User currentUser = (User) req.getSession().getAttribute(Constant.USER);
 
-        String questsName = req.getParameter("name");
-        String description = req.getParameter("description");
+        String questsName = req.getParameter(Constant.NAME);
+        String description = req.getParameter(Constant.DESCRIPTION);
 
 //        Long id = (Long) session.getAttribute(Constant.ID);
-        String winMessage = req.getParameter("winMessage");
-        String looseMessage = req.getParameter("looseMessage");
+        String winMessage = req.getParameter(Constant.WIN_MESSAGE);
+        String looseMessage = req.getParameter(Constant.LOOSE_MESSAGE);
 
         // Determine the number of questions
 
-
+        if (questsName == null || description == null || winMessage == null || looseMessage == null) {
+            req.setAttribute("errorMessage", "Все поля должны быть заполнены");
+        }
         Collection<Question> questsQuestions = new ArrayList<>();
         int i = 1;
         while (req.getParameter(Constant.QUESTION + i) != null) {
-            log.info("question{} is empty {}", i, req.getParameter(Constant.QUESTION + i).isEmpty());
             String questionText = req.getParameter(Constant.QUESTION + i);
-            log.info("question is {}", questionText);
-
             ArrayList<Answer> answers = new ArrayList<>();
             answers.add(new Answer(req.getParameter(Constant.ANSWER_WIN + i), true, 1L));
-            log.info("answer win is {}", req.getParameter(Constant.ANSWER_WIN + i));
             answers.add(new Answer(req.getParameter(Constant.ANSWER_LOOSE + i), false, 2L));
-            log.info("answer loose is {}", req.getParameter(Constant.ANSWER_LOOSE + i));
             questsQuestions.add(new Question(questionText, answers, Long.valueOf(i)));
             i++;
         }
-        questsQuestions.forEach(question -> {
-            log.info(question.getText());
-            log.info(question.getAnswers().toArray());
-            System.out.println();
-        });
+
         Quest quest = Quest.builder()
                 .name(questsName)
                 .description(description)

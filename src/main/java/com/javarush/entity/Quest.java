@@ -18,6 +18,7 @@ public class Quest {
     private Collection<Question> questions;
     private String winMessage;
     private String looseMessage;
+    private User author;
 
     public String getImage() { //TODO move to DTO
         if (id < 10) return "quest-0" + id;

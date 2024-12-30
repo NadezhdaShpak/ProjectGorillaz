@@ -1,7 +1,6 @@
 package com.javarush.repository;
 
 import com.javarush.entity.Quest;
-import com.javarush.entity.User;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;

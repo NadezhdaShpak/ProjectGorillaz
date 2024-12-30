@@ -7,6 +7,11 @@
         <c:forEach var="quest" items="${requestScope.quests}">
             <div class="feature col">
                 <h3 class="fs-2">${quest.name}</h3>
+                <img id="image"
+                     src="images/${quest.image}"
+                     width="100"
+                     alt="${quest.image}">
+                <br>
                 <a href="play-game?questId=${quest.id}" class="icon-link d-inline-flex align-items-center">
                     Играть
                     <svg class="bi" width="1em" height="1em">

@@ -22,4 +22,5 @@ public class Constant {
     public static final String QUEST = "quest";
     public static final String QUESTS = "quests";
     public static final String QUESTIONS = "questions";
+    public static final String UPDATEQUEST = "updateQuest";
 }
