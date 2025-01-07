@@ -10,8 +10,8 @@
     <form class="form-horizontal" method="post" enctype="multipart/form-data">
 
         <div class="mb-3">
-            <label for="quest-name" class="form-label">Название квеста</label>
-            <input name="name" type="text" class="form-control" id="quest-name" placeholder="Укажите имя квеста">
+            <label for="quest-name" class="form-label" >Название квеста</label>
+            <input name="name" type="text" class="form-control" id="quest-name" placeholder="Укажите имя квеста" required>
         </div>
 
 
@@ -32,15 +32,15 @@
 
         <div class="mb-3">
             <label for="quest-description" class="form-label">Описание квеста</label>
-            <input name="description" type="text" class="form-control" id="quest-description"
+            <input name="description" type="text" class="form-control" id="quest-description" required
                    placeholder="Укажите описание квеста">
         </div>
         <h2>Введите вопрос и ответы</h2>
         <div id="questions">
             <c:if test="${empty sessionScope.questsQuestions}">
-                Вопрос №1: <input type="text" name="question1" /> <br/>
-                Правильный ответ: <input type="text" name="answerWin1" /> <br/>
-                Неправильный ответ: <input type="text" name="answerLoose1" /> <br/><br/>
+                Вопрос №1: <input type="text" name="question1" required/> <br/>
+                Правильный ответ: <input type="text" name="answerWin1" required/> <br/>
+                Неправильный ответ: <input type="text" name="answerLoose1" required/> <br/><br/>
             </c:if>
         </div>
         <label for="questionsCount">Сколько вопросов будет в квесте?</label>
@@ -54,13 +54,13 @@
 
         <div class="mb-3">
             <label for="winMessage" class="form-label">Текст после выигрыша</label>
-            <input name="winMessage" type="text" class="form-control" id="winMessage"
+            <input name="winMessage" type="text" class="form-control" id="winMessage" required
                    placeholder="Укажите текст после выигрыша">
         </div>
 
         <div class="mb-3">
             <label for="looseMessage" class="form-label">Текст после проигрыша</label>
-            <input name="looseMessage" type="text" class="form-control" id="looseMessage"
+            <input name="looseMessage" type="text" class="form-control" id="looseMessage" required
                    placeholder="Укажите текст проигрыша">
         </div>
 
@@ -85,10 +85,6 @@
             }
         </script>
 
-
-        <c:if test="${not empty errorMessage}">
-            <div class="error">${errorMessage}</div>
-        </c:if>
         <div class=" form-group">
             <label class="col-md-4 control-label" for="submit"></label>
 

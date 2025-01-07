@@ -15,7 +15,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @WebServlet({Go.INDEX, Go.HOME,
-        Go.SIGNUP, Go.LOGIN, Go.LOGOUT, Go.UPDATE_QUEST,
+        Go.SIGNUP, Go.LOGIN, Go.LOGOUT, Go.EDIT_QUEST,
         Go.LIST_USER, Go.PROFILE, Go.EDIT_USER,
         Go.CREATE, Go.QUEST, Go.PLAY_GAME})
 @MultipartConfig (fileSizeThreshold = 1 << 20)

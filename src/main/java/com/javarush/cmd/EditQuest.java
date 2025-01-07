@@ -3,12 +3,9 @@ package com.javarush.cmd;
 
 import com.javarush.entity.Answer;
 import com.javarush.entity.Question;
-import com.javarush.entity.Role;
-import com.javarush.entity.User;
 import com.javarush.service.ImageService;
 import com.javarush.service.QuestService;
 import com.javarush.util.Constant;
-import com.javarush.util.Go;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
@@ -19,13 +16,12 @@ import org.apache.logging.log4j.Logger;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Objects;
 import java.util.Optional;
 
 @AllArgsConstructor
-public class Quest implements Command {
+public class EditQuest implements Command {
 
-    private static final Logger log = LogManager.getLogger(Quest.class);
+    private static final Logger log = LogManager.getLogger(EditQuest.class);
     private final QuestService questService;
     private final ImageService imageService;
 
@@ -52,7 +48,7 @@ public class Quest implements Command {
 
         long id = Long.parseLong(req.getParameter(Constant.ID));
 
-        Collection<Question> questsQuestions = new ArrayList<>();
+        ArrayList<Question> questsQuestions = new ArrayList<>();
         int i = 1;
         while (req.getParameter("questions[" + i + "].text") != null) {
             String question = String.format("questions[%d].text", i);

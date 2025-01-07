@@ -11,10 +11,11 @@ import java.util.Collection;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Question {
+public class Question implements AbstractEntity {
     private Collection<Answer> answers;
     private String text;
     private Long id;
+//    private GameState gameState;
 
 
     public Question(String text, Collection<Answer> answers, Long id) {

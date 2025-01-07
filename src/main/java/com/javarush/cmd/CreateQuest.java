@@ -38,12 +38,10 @@ public class CreateQuest implements Command {
         String winMessage = req.getParameter(Constant.WIN_MESSAGE);
         String looseMessage = req.getParameter(Constant.LOOSE_MESSAGE);
 
-        // Determine the number of questions
-
         if (questsName == null || description == null || winMessage == null || looseMessage == null) {
             req.setAttribute("errorMessage", "Все поля должны быть заполнены");
         }
-        Collection<Question> questsQuestions = new ArrayList<>();
+        ArrayList<Question> questsQuestions = new ArrayList<>();
         int i = 1;
         while (req.getParameter(Constant.QUESTION + i) != null) {
             String questionText = req.getParameter(Constant.QUESTION + i);
@@ -73,6 +71,6 @@ public class CreateQuest implements Command {
 
         session.setAttribute(Constant.QUEST, quest);
 
-        return Go.QUEST + "?id=" + quest.getId();
+        return Go.EDIT_QUEST + "?id=" + quest.getId();
     }
 }

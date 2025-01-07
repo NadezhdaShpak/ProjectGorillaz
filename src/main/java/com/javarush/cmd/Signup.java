@@ -22,16 +22,25 @@ public class Signup implements Command {
     @Override
     @SneakyThrows
     public String doPost(HttpServletRequest req) {
-        User user = User.builder()
-                .login(req.getParameter(Constant.LOGIN))
-                .password(req.getParameter(Constant.PASSWORD))
-                .role(Role.USER)
-                .build();
-        userService.create(user);
-        imageService.uploadImage(req, user.getImage());
-        HttpSession session = req.getSession();
+        User user;
+        String login = req.getParameter(Constant.LOGIN);
+        String password = req.getParameter(Constant.PASSWORD);
+        if (login.isEmpty() || password.isEmpty()) {
+            req.setAttribute("errorMessage", "Все поля должны быть заполнены");
+            return getView();
+        }
+        else {
+            user = User.builder()
+                    .login(login)
+                    .password(password)
+                    .role(Role.USER)
+                    .build();
+            userService.create(user);
+            imageService.uploadImage(req, user.getImage());
+            HttpSession session = req.getSession();
 
-        session.setAttribute(Constant.USER, user);
+            session.setAttribute(Constant.USER, user);
+        }
 
         return Go.PROFILE + "?id=" + user.getId();
     }

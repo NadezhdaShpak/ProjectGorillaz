@@ -30,9 +30,10 @@
                                     </script>
                                 </div>
                                 <p class="w-lg-50">Укажите данные для регистрации</p>
-                                <div class="mb-3"><input class="form-control" type="text" name="login" placeholder="Login"></div>
-                                <div class="mb-3"><input class="form-control" type="password" name="password" placeholder="Password"></div>
+                                <div class="mb-3"><input class="form-control" type="text" name="login" placeholder="Login" required></div>
+                                <div class="mb-3"><input class="form-control" type="password" name="password" placeholder="Password" required></div>
                                 <div class="mb-3"><button class="btn btn-primary d-block w-100" type="submit">Signup</button></div>
+
                             </form>
                         </div>
                     </div>

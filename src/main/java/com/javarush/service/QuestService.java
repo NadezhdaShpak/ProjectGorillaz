@@ -30,6 +30,6 @@ public class QuestService {
     }
 
     public Optional<Quest> get(long id) {
-        return questRepository.get(id);
+        return Optional.ofNullable(questRepository.get(id));
     }
 }

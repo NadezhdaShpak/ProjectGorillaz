@@ -22,5 +22,9 @@ public class Constant {
     public static final String QUEST = "quest";
     public static final String QUESTS = "quests";
     public static final String QUESTIONS = "questions";
-    public static final String UPDATEQUEST = "updateQuest";
+    public static final String UPDATE_QUEST = "updateQuest";
+    public static final String QUEST_ID = "questId";
+    public static final String GAME = "game";
+    public static final String ERROR_MESSAGE = "errorMessage";
+    public static final String ANSWER = "answer";
 }

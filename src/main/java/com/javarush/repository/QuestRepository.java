@@ -1,38 +1,63 @@
 package com.javarush.repository;
 
-import com.javarush.entity.Quest;
+import com.javarush.entity.*;
 
-import java.util.*;
-import java.util.concurrent.atomic.AtomicLong;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.stream.Stream;
 
-public class QuestRepository implements Repository<Quest> {
-    private final Map<Long, Quest> map = new HashMap<>();
-
-    public static final AtomicLong id = new AtomicLong(System.currentTimeMillis());
-
+public class QuestRepository extends AbstractRepo<Quest> {
     @Override
-    public Collection<Quest> getAll() {
-        return map.values();
+    public Stream<Quest> find(Quest pattern) {
+        return map.values()
+                .stream()
+                .filter(u -> nullOrEquals(pattern.getId(), u.getId()))
+                .filter(u -> nullOrEquals(pattern.getDescription(), u.getDescription()))
+                .filter(u -> nullOrEquals(pattern.getName(), u.getName()))
+                .filter(u -> nullOrEquals(pattern.getAuthorId(), u.getAuthorId()));
     }
 
-    @Override
-    public Optional<Quest> get(long id) {
-        return Optional.ofNullable(map.get(id));
+
+    public QuestRepository() {
+        String name = "Квест про лису";
+        String description = "Квестик про лисичку";
+        Long authorId = 1L;
+
+        String winMessage = "Ну молодец";
+        String looseMessage = "ты идиот?";
+
+
+        User user = User.builder()
+                .id(5L)
+                .login("Liss")
+                .password("123")
+                .role(Role.ADMIN)
+                .build();
+
+        map.put(0L, new Quest(0L, name, description, authorId, addQuestions(), winMessage, looseMessage, user));
     }
 
-    @Override
-    public void create (Quest entity) {
-            entity.setId(id.incrementAndGet());
-            update(entity);
-    }
+    private static ArrayList<Question> addQuestions() {
+        ArrayList<Question> questions = new ArrayList<>();
+        Collection<Answer> answers1 = new ArrayList<>();
+        answers1.add(new Answer("в лесу", true, 1L));
+        answers1.add(new Answer("не знаю", false, 2L));
+        questions.add(new Question("Где лиса?", answers1, 1L));
 
-    @Override
-    public void update(Quest entity) {
-        map.put(entity.getId(), entity);
-    }
+        Collection<Answer> answers2 = new ArrayList<>();
+        answers2.add(new Answer("Сам видел", true, 1L));
+        answers2.add(new Answer("а где ей еще быть", false, 2L));
+        questions.add(new Question("Откуда знаешь?", answers2, 2L));
 
-    @Override
-    public void delete(Quest entity) {
-        map.remove(entity.getId());
+        Collection<Answer> answers3 = new ArrayList<>();
+        answers3.add(new Answer("кур воровала", true, 1L));
+        answers3.add(new Answer("танцевала с петухом", false, 2L));
+        questions.add(new Question("И что она делала?", answers3, 3L));
+
+        Collection<Answer> answers4 = new ArrayList<>();
+        answers4.add(new Answer("вон от кур одни перья остались", true, 1L));
+        answers4.add(new Answer("мамой клянусь", false, 2L));
+        questions.add(new Question("чем докажешь?", answers4, 4L));
+        return questions;
     }
 }

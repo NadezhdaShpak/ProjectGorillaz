@@ -18,7 +18,6 @@ public class UsersProfile implements Command {
     private final UserService userService;
     private final ImageService imageService;
 
-
     @Override
     public String doGet(HttpServletRequest req) {
         String stringId = req.getParameter(Constant.ID);

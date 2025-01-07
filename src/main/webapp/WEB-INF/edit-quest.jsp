@@ -27,6 +27,7 @@
                 </div>
                 <div class="form-group">
                     <label for="image">Картинка</label>
+                    <br>
                     <img id="previewId" src="images/${quest.getImage()}" width="150"
                          alt="${quest.getImage()}"/>
                     <input id="image" name="image" class="input-file" type="file"/>

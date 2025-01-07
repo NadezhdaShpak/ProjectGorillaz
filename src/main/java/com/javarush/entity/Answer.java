@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class Answer {
+public class Answer implements AbstractEntity {
     private String text;
     private boolean win;
     private Long id;

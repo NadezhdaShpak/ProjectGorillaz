@@ -9,9 +9,10 @@
                 <h3 class="fs-2">${quest.name}</h3>
                 <img id="image"
                      src="images/${quest.image}"
-                     width="100"
+                     width="150"
                      alt="${quest.image}">
                 <br>
+                <p class="text-muted mb-0">${quest.description}</p>
                 <a href="play-game?questId=${quest.id}" class="icon-link d-inline-flex align-items-center">
                     Играть
                     <svg class="bi" width="1em" height="1em">
@@ -19,7 +20,7 @@
                     </svg>
                 </a>
                 <c:if test='${sessionScope.user.role=="ADMIN"}'>
-                    <a href="quest?id=${quest.id}" class="icon-link d-inline-flex align-items-center">
+                    <a href="edit-quest?id=${quest.id}" class="icon-link d-inline-flex align-items-center">
                         Редактировать
                         <svg class="bi" width="1em" height="1em">
                             <use xlink:href="#chevron-right"></use>
