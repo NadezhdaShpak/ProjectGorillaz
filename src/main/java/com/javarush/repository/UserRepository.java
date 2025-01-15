@@ -21,31 +21,11 @@ public class UserRepository extends AbstractRepo<User> {
         map.put(4L, new User(4L, "Khmelov", "admin", Role.ADMIN));
     }
 
-//    @Override
-//    public Collection<User> getAll() {
-//        return map.values();
-//    }
-//
-//    @Override
-//    public Optional<User> get(long id) {
-//        return Optional.ofNullable(map.get(id));
-//    }
-//
     @Override
     public void create(User entity) {
         entity.setId(id.incrementAndGet());
         update(entity);
     }
-//
-//    @Override
-//    public void update(User entity) {
-//        map.put(entity.getId(), entity);
-//    }
-//
-//    @Override
-//    public void delete(User entity) {
-//        map.remove(entity.getId());
-//    }
 
     @Override
     public Stream<User> find(User pattern) {

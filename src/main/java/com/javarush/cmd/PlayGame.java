@@ -12,8 +12,7 @@ import lombok.AllArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 @SuppressWarnings("unused")
 @AllArgsConstructor
@@ -29,14 +28,13 @@ public class PlayGame implements Command {
         if (reqGame != null) {
             Quest quest = (Quest) req.getSession().getAttribute(Constant.QUEST);
             req.setAttribute(Constant.GAME, reqGame);
-        for (Question question : quest.getQuestions()) {
-            if (Objects.equals(question.getId(), reqGame.getCurrentQuestionId())) {
-                req.getSession().setAttribute(Constant.QUESTION, question);
+            for (Question question : quest.getQuestions()) {
+                if (Objects.equals(question.getId(), reqGame.getCurrentQuestionId())) {
+                    req.getSession().setAttribute(Constant.QUESTION, question);
+                }
             }
-        }
             return getView();
-        }
-        else {
+        } else {
             User currentUser = (User) req.getSession().getAttribute(Constant.USER);
             long userId;
             if (currentUser != null) {
@@ -51,11 +49,8 @@ public class PlayGame implements Command {
 
                         Optional<Game> optionalGame = gameService.getGame(questId, userId);
                         Game newGame = optionalGame.get();
-                        log.info("48 created new game");
                         req.setAttribute(Constant.GAME, newGame);
                         showOneQuestion(req, newGame);
-
-//                    userRepository.get(userId).getGames().add(newGame);
                     }
                 }
             } else {
@@ -69,36 +64,40 @@ public class PlayGame implements Command {
     public String doPost(HttpServletRequest request) {
         HttpSession session = request.getSession();
         Game reqGame = (Game) session.getAttribute(Constant.GAME);
-
-
         Quest reqQuest = (Quest) session.getAttribute(Constant.QUEST);
         Long gameId = reqGame.getId();
-        log.info("70 gameID" + gameId);
         Question question = (Question) session.getAttribute(Constant.QUESTION);
         Long currentQuestionId = question.getId();
-        log.info("73 currentQuestionId " + currentQuestionId);
-        String selectedAnswerId = request.getParameter("answer");
-        Long answerId = request.getParameter(Constant.ANSWER) == null ? 0 : Long.parseLong(request.getParameter(Constant.ANSWER));
+        String selectedAnswerId = request.getParameter(Constant.ANSWER);
+
+        long answerId = request.getParameter(Constant.ANSWER) == null ? 0 : Long.parseLong(request.getParameter(Constant.ANSWER));
+
         Optional<Game> game = gameService.processOneStep(gameId, currentQuestionId, answerId);
+
+        Long nextQuestionId = currentQuestionId + 1;
+
+        Optional<Question> nextQuestion = reqGame.getQuest().getQuestions().stream().filter(q -> Objects.equals(q.getId(), nextQuestionId)).findFirst();
+        Question currQuestion = nextQuestion.get();
+        List<Answer> answers = (List<Answer>) currQuestion.getAnswers();
+        Collections.shuffle(answers);
+        request.getSession().setAttribute(Constant.QUESTION, new Question(currQuestion.getText(), answers, currQuestion.getId()));
         if (game.isPresent()) {
             Game currentGame = game.get();
             if (answerId == 0 && request.getParameter(Constant.GAME) != null) {
                 String message = "Нужно выбрать какой-то ответ";
                 log.warn(message);
+                request.getSession().setAttribute(Constant.ERROR_MESSAGE, message);
                 --currentQuestionId;
-//                RequestHelpers.createError(request, message);
-            }
-            else if (currentGame.getGameState() == GameState.LOSE) {
+            } else if (currentGame.getGameState() == GameState.LOSE) {
                 request.getSession().setAttribute(Constant.GAME, currentGame);
-            }
-            else if (currentGame.getGameState() == GameState.WIN) {
+            } else if (currentGame.getGameState() == GameState.WIN) {
 
             }
             return "%s?questId=%d&id=%d".formatted(Go.PLAY_GAME, reqQuest.getId(), game.get().getId());
         } else {
             String message = "Нет такой игры";
             log.warn(message);
-//            RequestHelpers.createError(request, message);
+            request.getSession().setAttribute(Constant.ERROR_MESSAGE, message);
             return Go.HOME;
         }
     }
@@ -109,14 +108,12 @@ public class PlayGame implements Command {
         Long questID = game.getQuest().getId();
         int currentQuestionId = game.getCurrentQuestionId().intValue();
         Quest quest = questService.get(questID).get();
-//        for (Question question : quest.getQuestions()) {
-//            if (question.getId() == currentQuestionId) {
-//                request.getSession().setAttribute(Constant.QUESTION, question);
-//            }
-//        }
+
         Optional<Question> question = quest.getQuestions().stream().filter(q -> q.getId() == currentQuestionId).findFirst();
-        request.getSession().setAttribute(Constant.QUESTION, question.orElseThrow());
-        log.info("108 ID = {}, {}", question.get().getId(), question);
+        Question currQuestion = question.get();
+        List<Answer> answers = (List<Answer>) currQuestion.getAnswers();
+        Collections.shuffle(answers);
+        request.getSession().setAttribute(Constant.QUESTION, new Question(currQuestion.getText(), answers, currQuestion.getId()));
         request.getSession().setAttribute(Constant.QUEST, quest);
 
     }

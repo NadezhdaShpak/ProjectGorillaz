@@ -33,8 +33,6 @@ public class CreateQuest implements Command {
 
         String questsName = req.getParameter(Constant.NAME);
         String description = req.getParameter(Constant.DESCRIPTION);
-
-//        Long id = (Long) session.getAttribute(Constant.ID);
         String winMessage = req.getParameter(Constant.WIN_MESSAGE);
         String looseMessage = req.getParameter(Constant.LOOSE_MESSAGE);
 
@@ -61,16 +59,13 @@ public class CreateQuest implements Command {
                 .looseMessage(looseMessage)
                 .build();
         questService.create(quest);
-        log.info("{} created", quest.getName());
+        log.info("Created new quest {}", quest.getName());
         try {
             imageService.uploadImage(req, quest.getImage());
         } catch (IOException | ServletException e) {
             throw new RuntimeException(e);
         }
-        log.info("questions {}", quest.getQuestions().toArray());
-
         session.setAttribute(Constant.QUEST, quest);
-
         return Go.EDIT_QUEST + "?id=" + quest.getId();
     }
 }

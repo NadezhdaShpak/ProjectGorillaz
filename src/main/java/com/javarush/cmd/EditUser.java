@@ -39,6 +39,8 @@ public class EditUser implements Command {
     public String doPost(HttpServletRequest req) {
         long id = Long.parseLong(req.getParameter(Constant.ID));
         User currentUser = (User) req.getSession().getAttribute(Constant.USER);
+        long win = currentUser.getNumberOfWinGames();
+        long loose = currentUser.getNumberOfLooseGames();
         User user;
         if (currentUser.getRole() == Role.ADMIN) {
             user = User.builder()
@@ -46,6 +48,8 @@ public class EditUser implements Command {
                     .login(req.getParameter(Constant.LOGIN))
                     .password(req.getParameter(Constant.PASSWORD))
                     .role(Role.valueOf(req.getParameter(Constant.ROLE)))
+                    .numberOfWinGames(win)
+                    .numberOfLooseGames(loose)
                     .build();
         }
         else {
@@ -54,6 +58,8 @@ public class EditUser implements Command {
                     .login(req.getParameter(Constant.LOGIN))
                     .password(req.getParameter(Constant.PASSWORD))
                     .role(currentUser.getRole())
+                    .numberOfWinGames(win)
+                    .numberOfLooseGames(loose)
                     .build();
         }
         userService.update(user);

@@ -45,13 +45,13 @@
                     <c:forEach var="question" items="${quest.questions}">
                         <li>
                             <strong>Редактировать вопрос:</strong>
-                            <input type="text" name="questions[${question.id}].text" value="${question.text}" class="form-control"/>
+                            <input type="text" name="question-${question.id}" value="${question.text}" class="form-control"/>
 
                             <ul>
                                 <c:forEach var="answer" items="${question.answers}">
                                     <li>
                                         <strong>Редактировать ответ:</strong>
-                                        <input type="text" name="questions[${question.id}].answers[${answer.id}].text" value="${answer.text}" class="form-control"/>
+                                        <input type="text" name="question-${question.id}.answer-${answer.id}" value="${answer.text}" class="form-control"/>
                                     </li>
                                 </c:forEach>
                             </ul>

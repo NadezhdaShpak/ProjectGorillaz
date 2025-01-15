@@ -21,7 +21,7 @@ public class UsersProfile implements Command {
     @Override
     public String doGet(HttpServletRequest req) {
         String stringId = req.getParameter(Constant.ID);
-        if (req.getParameter(Constant.ID) != null) {
+        if (stringId != null) {
             long id = Long.parseLong(req.getParameter(Constant.ID));
             Optional<User> optionalUser = userService.get(id);
             if (optionalUser.isPresent()) {

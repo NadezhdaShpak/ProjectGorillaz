@@ -13,11 +13,22 @@ import java.util.Collection;
 @AllArgsConstructor
 @Builder
 public class User implements AbstractEntity {
-
     private Long id;
     private String login;
     private String password;
     private Role role;
+    private Long numberOfLooseGames;
+    private Long numberOfWinGames;
+
+
+    public User(Long id, String login, String password, Role role) {
+        this.id = id;
+        this.login = login;
+        this.password = password;
+        this.role = role;
+        this.numberOfWinGames = 0L;
+        this.numberOfLooseGames = 0L;
+    }
 
     private final Collection<Game> games = new ArrayList<>();
 

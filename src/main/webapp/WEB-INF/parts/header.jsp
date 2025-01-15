@@ -29,7 +29,7 @@
             <div class="collapse navbar-collapse" id="navcol-1">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item"><a class="nav-link active" href="home">Home</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#statistics">Статистика</a></li>
+                    <li class="nav-item"><a class="nav-link" href="statistics">Статистика</a></li>
                     <li class="nav-item"><a class="nav-link" href="list-user">Пользователи</a></li>
                     <c:choose>
                     <c:when test="${not empty sessionScope.user}">
@@ -50,7 +50,11 @@
                     </c:choose>
                 </ul>
             </div>
+
         </div>
     </nav>
+    <c:if test="${not empty sessionScope.errorMessage}">
+        <h5 class="mb-1 alert-danger" style="text-align: center">${sessionScope.errorMessage}</h5>
+    </c:if>
 </header>
 </body>

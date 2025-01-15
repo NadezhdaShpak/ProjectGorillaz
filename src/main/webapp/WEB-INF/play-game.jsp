@@ -29,7 +29,7 @@
                 <c:choose>
                     <c:when test="${game.gameState == 'LOSE'}">
                         <br>
-                        <div class="alert alert-danger" style="margin: 10px; border-radius: 5px;">${quest.looseMessage}</div>
+                        <div class="alert alert-danger" style="margin: 10px;">${quest.looseMessage}</div>
                         <br>
                         <button type="button" style="width:200px" class="btn btn-warning" onclick="newGame()">Сыграем еще?</button>
                         <script>
@@ -44,10 +44,21 @@
 
                     <c:when test="${game.gameState == 'WIN'}">
                         <br>
-                        <div class="alert alert-success" style="margin: 10px; border-radius: 5px;">${quest.winMessage}</div>
+                        <div class="alert alert-success" style="margin: 10px;">${quest.winMessage}</div>
                         <br>
-                        <button type="button" class="btn btn-warning" onclick="window.location='home'">Сыграем во что-нибудь еще?
+                        <button type="button" style="margin: 10px; width:250px" class="alert alert-success" onclick="window.location='home'">Сыграем во что-нибудь еще?
                         </button>
+                        <br>
+                        <br>
+                        <button type="button" style="margin: 10px; width:250px" class="btn btn-warning" onclick="newGame()">Повторим?</button>
+                        <script>
+                            function newGame() {
+                                <%
+                                    request.getSession().removeAttribute("game");
+                                %>
+                                window.location='play-game?questId=${quest.id}';
+                            }
+                        </script>
                     </c:when>
 
                     <c:otherwise>

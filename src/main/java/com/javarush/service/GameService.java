@@ -1,17 +1,16 @@
 package com.javarush.service;
 
-import com.javarush.cmd.PlayGame;
 import com.javarush.entity.*;
+import com.javarush.exception.AppException;
 import com.javarush.repository.GameRepository;
 import com.javarush.repository.QuestRepository;
-import com.javarush.repository.Repository;
+import com.javarush.repository.UserRepository;
 import com.javarush.util.Constant;
 import lombok.AllArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Comparator;
 import java.util.Optional;
 
@@ -20,6 +19,7 @@ public class GameService {
 
     private final GameRepository gameRepository;
     private final QuestRepository questRepository;
+    private final UserRepository userRepository;
     private static final Logger log = LogManager.getLogger(GameService.class);
 
 
@@ -64,32 +64,35 @@ public class GameService {
 
     public Optional<Game> processOneStep(Long gameId, Long questionId, Long answerId) {
         Game game = gameRepository.get(gameId);
-        log.info("gameID = {}", game.getId());
         ArrayList<Question> questions = game.getQuest().getQuestions();
-        log.info("questionId = {}", questionId);
-//        for (Question question : questions) {
-//            log.info("question #{} = {}", question.getId(), question);
-//        }
-        log.info("questions.size() " + questions.size());
+        User user = userRepository.get(game.getUserId());
         if (game.getGameState() == GameState.PLAYING) {
-            if (answerId == 1 && questionId.intValue() == (questions.size() - 1)) {
-                game.setGameState(GameState.WIN);
-            }
-            else if (answerId == 2) {
-                game.setGameState(GameState.LOSE);
-            }
-            else if (answerId == 0) {
-
-            }
-            else {
-                game.setCurrentQuestionId(++questionId);
-                gameRepository.update(game);
-            }
+            checkWin(questionId, answerId, questions, game, user);
 
         } else {
             game = getNewGame(game.getUserId(), game.getQuestId());
         }
         return Optional.ofNullable(game);
+    }
+
+    public void checkWin(Long questionId, Long answerId, ArrayList<Question> questions, Game game, User user) {
+        if (answerId == 1 && questionId.intValue() == (questions.size() - 1)) {
+            game.setGameState(GameState.WIN);
+            user.setNumberOfWinGames(user.getNumberOfWinGames() + 1);
+            userRepository.update(user);
+        }
+        else if (answerId == 2) {
+            game.setGameState(GameState.LOSE);
+            user.setNumberOfLooseGames(user.getNumberOfLooseGames() + 1);
+            userRepository.update(user);
+        }
+        else if (answerId == 0) {
+            throw new AppException("Нужно выбрать какой-то ответ");
+        }
+        else {
+            game.setCurrentQuestionId(++questionId);
+            gameRepository.update(game);
+        }
     }
 
 }
