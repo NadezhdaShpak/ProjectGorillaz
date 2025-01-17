@@ -2,9 +2,7 @@ package com.javarush.cmd;
 
 import com.javarush.BaseIT;
 import com.javarush.config.Winter;
-import com.javarush.entity.Game;
-import com.javarush.entity.Quest;
-import com.javarush.entity.User;
+import com.javarush.entity.*;
 import com.javarush.exception.AppException;
 import com.javarush.service.GameService;
 import com.javarush.util.Constant;
@@ -13,6 +11,8 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+
+import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -78,6 +78,24 @@ class PlayGameIT extends BaseIT {
         String gameState = "LOSE";
         playGame.doPost(request);
         Assertions.assertEquals(gameState, game.getGameState().name());
+    }
+
+    @Test
+    @DisplayName("When the answer is correct, the game is won")
+    void whenTheAnswerIsCorrectTheGameIsWon() {
+        Game game = new Game();
+        User user = userRepository.get(2L);
+        ArrayList<Question> questions = new ArrayList<>();
+        questions.add(new Question());
+        questions.add(new Question());
+        long numberOfWinGames = user.getNumberOfWinGames();
+        // Act
+        gameService.checkWin(1L, 1L, questions, game, user);
+
+        // Assert
+        assertEquals(GameState.WIN, game.getGameState());
+        assertEquals(numberOfWinGames + 1, user.getNumberOfWinGames());
+
     }
 
 }
