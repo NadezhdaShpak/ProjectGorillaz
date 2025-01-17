@@ -1,12 +1,7 @@
 package com.javarush.service;
-
-import com.javarush.cmd.Signup;
 import com.javarush.exception.AppException;
 import com.javarush.repository.UserRepository;
 import com.javarush.entity.User;
-import org.apache.logging.log4j.LogManager;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.Collection;
 import java.util.Optional;

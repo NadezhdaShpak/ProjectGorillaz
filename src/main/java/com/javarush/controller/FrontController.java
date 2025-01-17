@@ -1,7 +1,7 @@
 package com.javarush.controller;
 
 import com.javarush.cmd.Command;
-import com.javarush.cmd.Login;
+import com.javarush.config.Config;
 import com.javarush.config.Winter;
 import com.javarush.entity.Role;
 import com.javarush.exception.AppException;
@@ -40,6 +40,8 @@ public class FrontController extends HttpServlet {
 
     @Override
     public void init(ServletConfig config) {
+        Config conf = Winter.find(Config.class);
+        conf.fillEmptyRepository();
         config.getServletContext().setAttribute("roles", Role.values());
     }
 

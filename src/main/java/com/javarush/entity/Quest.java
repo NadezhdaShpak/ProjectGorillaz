@@ -5,7 +5,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
-import java.util.Collection;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -14,7 +13,6 @@ public class Quest implements AbstractEntity {
     private Long id;
     private String name;
     private String description;
-//    private String reward;
     private Long authorId;
     private ArrayList<Question> questions;
     private String winMessage;

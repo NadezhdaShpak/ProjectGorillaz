@@ -8,9 +8,7 @@ import com.javarush.util.Constant;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
-
 import java.util.Optional;
-
 
 @SuppressWarnings("unused")
 @AllArgsConstructor

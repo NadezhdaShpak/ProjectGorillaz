@@ -1,9 +1,6 @@
 package com.javarush.repository;
 
-import com.javarush.entity.User;
-
 import java.util.Collection;
-import java.util.Optional;
 import java.util.stream.Stream;
 
 public interface Repository<T> {

@@ -6,7 +6,7 @@ import com.javarush.service.QuestService;
 import com.javarush.util.Constant;
 import com.javarush.util.Go;
 import jakarta.servlet.http.HttpServletRequest;
-//
+
 import jakarta.servlet.http.HttpSession;
 import lombok.AllArgsConstructor;
 import org.apache.logging.log4j.LogManager;
@@ -24,18 +24,20 @@ public class PlayGame implements Command {
 
     @Override
     public String doGet(HttpServletRequest req) {
-        Game reqGame = (Game) req.getSession().getAttribute(Constant.GAME);
+        HttpSession session = req.getSession();
+
+        Game reqGame = (Game) session.getAttribute(Constant.GAME);
         if (reqGame != null) {
-            Quest quest = (Quest) req.getSession().getAttribute(Constant.QUEST);
+            Quest quest = (Quest) session.getAttribute(Constant.QUEST);
             req.setAttribute(Constant.GAME, reqGame);
             for (Question question : quest.getQuestions()) {
                 if (Objects.equals(question.getId(), reqGame.getCurrentQuestionId())) {
-                    req.getSession().setAttribute(Constant.QUESTION, question);
+                    session.setAttribute(Constant.QUESTION, question);
                 }
             }
             return getView();
         } else {
-            User currentUser = (User) req.getSession().getAttribute(Constant.USER);
+            User currentUser = (User) session.getAttribute(Constant.USER);
             long userId;
             if (currentUser != null) {
                 userId = currentUser.getId();
@@ -80,16 +82,16 @@ public class PlayGame implements Command {
         Question currQuestion = nextQuestion.get();
         List<Answer> answers = (List<Answer>) currQuestion.getAnswers();
         Collections.shuffle(answers);
-        request.getSession().setAttribute(Constant.QUESTION, new Question(currQuestion.getText(), answers, currQuestion.getId()));
+        session.setAttribute(Constant.QUESTION, new Question(currQuestion.getText(), answers, currQuestion.getId()));
         if (game.isPresent()) {
             Game currentGame = game.get();
             if (answerId == 0 && request.getParameter(Constant.GAME) != null) {
                 String message = "Нужно выбрать какой-то ответ";
                 log.warn(message);
-                request.getSession().setAttribute(Constant.ERROR_MESSAGE, message);
+                session.setAttribute(Constant.ERROR_MESSAGE, message);
                 --currentQuestionId;
             } else if (currentGame.getGameState() == GameState.LOSE) {
-                request.getSession().setAttribute(Constant.GAME, currentGame);
+                session.setAttribute(Constant.GAME, currentGame);
             } else if (currentGame.getGameState() == GameState.WIN) {
 
             }
@@ -97,14 +99,14 @@ public class PlayGame implements Command {
         } else {
             String message = "Нет такой игры";
             log.warn(message);
-            request.getSession().setAttribute(Constant.ERROR_MESSAGE, message);
+            session.setAttribute(Constant.ERROR_MESSAGE, message);
             return Go.HOME;
         }
     }
 
-
     private void showOneQuestion(HttpServletRequest request, Game game) {
-        request.getSession().setAttribute(Constant.GAME, game);
+        HttpSession session = request.getSession();
+        session.setAttribute(Constant.GAME, game);
         Long questID = game.getQuest().getId();
         int currentQuestionId = game.getCurrentQuestionId().intValue();
         Quest quest = questService.get(questID).get();
@@ -113,9 +115,7 @@ public class PlayGame implements Command {
         Question currQuestion = question.get();
         List<Answer> answers = (List<Answer>) currQuestion.getAnswers();
         Collections.shuffle(answers);
-        request.getSession().setAttribute(Constant.QUESTION, new Question(currQuestion.getText(), answers, currQuestion.getId()));
-        request.getSession().setAttribute(Constant.QUEST, quest);
-
+        session.setAttribute(Constant.QUESTION, new Question(currQuestion.getText(), answers, currQuestion.getId()));
+        session.setAttribute(Constant.QUEST, quest);
     }
-
 }

@@ -11,7 +11,6 @@ import lombok.SneakyThrows;
 
 import java.util.Optional;
 
-
 @SuppressWarnings("unused")
 @AllArgsConstructor
 public class EditUser implements Command {

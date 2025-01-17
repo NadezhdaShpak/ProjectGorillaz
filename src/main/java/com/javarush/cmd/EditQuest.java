@@ -1,6 +1,5 @@
 package com.javarush.cmd;
 
-
 import com.javarush.entity.Answer;
 import com.javarush.entity.Quest;
 import com.javarush.entity.Question;
@@ -16,7 +15,6 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Optional;
 
 @AllArgsConstructor

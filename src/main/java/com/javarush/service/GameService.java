@@ -5,10 +5,7 @@ import com.javarush.exception.AppException;
 import com.javarush.repository.GameRepository;
 import com.javarush.repository.QuestRepository;
 import com.javarush.repository.UserRepository;
-import com.javarush.util.Constant;
 import lombok.AllArgsConstructor;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -20,8 +17,6 @@ public class GameService {
     private final GameRepository gameRepository;
     private final QuestRepository questRepository;
     private final UserRepository userRepository;
-    private static final Logger log = LogManager.getLogger(GameService.class);
-
 
     public Optional<Game> getGame(Long questId, Long userId) {
         Game gamePattern = Game.builder().questId(questId).build();
@@ -48,12 +43,9 @@ public class GameService {
                 .gameState(GameState.PLAYING)
                 .userId(userId) //from session
                 .build();
-//        userRepository.get(userId).getGames().add(newGame);
         gameRepository.create(newGame);
         return newGame;
     }
-
-
 
     public Optional<Game> processOneStep(Long gameId, Long questionId, Long answerId) {
         Game game = gameRepository.get(gameId);
