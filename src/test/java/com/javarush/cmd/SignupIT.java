@@ -22,7 +22,7 @@ class SignupIT extends BaseIT {
     @Test
     @DisplayName("When signup correctly create new user and redirect to profile")
     void WhenSignupCorrectlyCreateNewUserAndRedirectToProfile() {
-        when(request.getParameter(Constant.LOGIN)).thenReturn("newUser");
+        when(request.getParameter(Constant.LOGIN)).thenReturn("newAdmin");
         when(request.getParameter(Constant.PASSWORD)).thenReturn("admin");
         when(request.getParameter(Constant.ROLE)).thenReturn("GUEST");
 

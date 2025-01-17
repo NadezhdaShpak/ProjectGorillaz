@@ -12,7 +12,6 @@ import java.util.Collection;
 import java.util.Optional;
 
 public class UserService {
-    private static final org.apache.logging.log4j.Logger log = LogManager.getLogger(UserService.class);
 
     private final UserRepository userRepository;
 

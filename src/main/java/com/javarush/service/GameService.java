@@ -23,13 +23,6 @@ public class GameService {
     private static final Logger log = LogManager.getLogger(GameService.class);
 
 
-//
-//    public GameService(GameRepository gameRepository) {
-//        this.gameRepository = gameRepository;
-//    }
-//    private final Repository<Question> questionRepository;
-//    private final Repository<Answer> answerRepository;
-
     public Optional<Game> getGame(Long questId, Long userId) {
         Game gamePattern = Game.builder().questId(questId).build();
         gamePattern.setUserId(userId);

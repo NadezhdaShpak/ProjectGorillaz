@@ -31,16 +31,17 @@ public class Login implements Command {
         String password = req.getParameter(Constant.PASSWORD);
         boolean userFound = false;
             for (User u : users) {
-                if (u.getLogin().equalsIgnoreCase(login) && u.getPassword().equals(password)) {
-                    session.setAttribute(Constant.USER, u);
-                    userFound = true;
-                    break;
-                }
-                else if (u.getLogin().equalsIgnoreCase(login) && !u.getPassword().equals(password)) {
-                    String message = "Wrong password";
-                    log.warn(message);
-                    session.setAttribute(Constant.ERROR_MESSAGE, message);
-                    return Go.LOGIN;
+                if (u.getLogin() != null && u.getPassword() != null) {
+                    if (u.getLogin().equalsIgnoreCase(login) && u.getPassword().equals(password)) {
+                        session.setAttribute(Constant.USER, u);
+                        userFound = true;
+                        break;
+                    } else if (u.getLogin().equalsIgnoreCase(login) && !u.getPassword().equals(password)) {
+                        String message = "Wrong password";
+                        log.warn(message);
+                        session.setAttribute(Constant.ERROR_MESSAGE, message);
+                        return Go.LOGIN;
+                    }
                 }
             }
             if (!userFound) {

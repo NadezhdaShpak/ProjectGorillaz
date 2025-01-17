@@ -4,13 +4,13 @@
 <c:import url="parts/header.jsp"/>
 <body>
 <script>
-    let id = 2;
+    let id = 3;
 </script>
 <div class="container">
     <form class="form-horizontal" method="post" enctype="multipart/form-data">
 
         <div class="mb-3">
-            <label for="quest-name" class="form-label" >Название квеста</label>
+            <label for="quest-name" class="form-label">Название квеста</label>
             <input name="name" type="text" class="form-control" id="quest-name" placeholder="Укажите имя квеста" required>
         </div>
 
@@ -41,6 +41,9 @@
                 Вопрос №1: <input type="text" name="question1" required/> <br/>
                 Правильный ответ: <input type="text" name="answerWin1" required/> <br/>
                 Неправильный ответ: <input type="text" name="answerLoose1" required/> <br/><br/>
+                Вопрос №2: <input type="text" name="question2" required/> <br/>
+                Правильный ответ: <input type="text" name="answerWin2" required/> <br/>
+                Неправильный ответ: <input type="text" name="answerLoose2" required/> <br/><br/>
             </c:if>
         </div>
         <label for="questionsCount">Сколько вопросов будет в квесте?</label>

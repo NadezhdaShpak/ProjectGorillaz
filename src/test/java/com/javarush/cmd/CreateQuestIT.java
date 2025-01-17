@@ -21,7 +21,7 @@ class CreateQuestIT extends BaseIT {
     @Test
     @DisplayName("When do post correct redirect to edit-quest")
     void WhenDoPostCorrectRedirectToEditQuest() {
-        User user = userservice.getAll().stream().findFirst().orElseThrow();
+        User user = userRepository.get(4L);
         when(request.getSession().getAttribute(Constant.USER)).thenReturn(user);
 
         when(request.getParameter(Constant.NAME)).thenReturn("testQuest");
@@ -40,18 +40,18 @@ class CreateQuestIT extends BaseIT {
     @Test
     @DisplayName("When do post correct create new Quest")
     void WhenDoPostCorrectCreateNewQuest() {
-        User user = userservice.getAll().stream().findFirst().orElseThrow();
+        User user = userRepository.get(4L);
         when(request.getSession().getAttribute(Constant.USER)).thenReturn(user);
-        when(request.getParameter(Constant.NAME)).thenReturn("testQuest");
-        when(request.getParameter(Constant.DESCRIPTION)).thenReturn("testDescription");
-        when(request.getParameter(Constant.WIN_MESSAGE)).thenReturn("testWinMessage");
-        when(request.getParameter(Constant.LOOSE_MESSAGE)).thenReturn("testLooseMessage");
-        when(request.getParameter(Constant.QUESTION + 1)).thenReturn("testQuestion");
-        when(request.getParameter(Constant.ANSWER_WIN + 1)).thenReturn("testWinAnswer");
-        when(request.getParameter(Constant.ANSWER_LOOSE + 1)).thenReturn("testLooseAnswer");
+        when(request.getParameter(Constant.NAME)).thenReturn("testCreateQuest");
+        when(request.getParameter(Constant.DESCRIPTION)).thenReturn("testCreateDescription");
+        when(request.getParameter(Constant.WIN_MESSAGE)).thenReturn("testCreateWinMessage");
+        when(request.getParameter(Constant.LOOSE_MESSAGE)).thenReturn("testCreateLooseMessage");
+        when(request.getParameter(Constant.QUESTION + 1)).thenReturn("testCreateQuestion");
+        when(request.getParameter(Constant.ANSWER_WIN + 1)).thenReturn("testCreateWinAnswer");
+        when(request.getParameter(Constant.ANSWER_LOOSE + 1)).thenReturn("testCreateLooseAnswer");
 
         createQuest.doPost(request);
-        assertTrue(questRepository.getAll().toString().contains("testQuest"));
+        assertTrue(questRepository.getAll().toString().contains("testCreateQuest"));
         verify(session).setAttribute(eq(Constant.QUEST), any(Quest.class));
     }
 }

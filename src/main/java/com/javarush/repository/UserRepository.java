@@ -11,7 +11,7 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Stream;
 
 public class UserRepository extends AbstractRepo<User> {
-    public final AtomicLong id = new AtomicLong(5L);
+    public final AtomicLong id = new AtomicLong(4L);
 
 
     public UserRepository() {

@@ -15,16 +15,16 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 public class BaseIT {
-    public HttpServletRequest request;
-    public HttpServletResponse response;
-    public HttpSession session;
-    public UserRepository userRepository;
-    public QuestRepository questRepository;
-    public UserService userservice;
-    public QuestService questService;
-    public GameService gameService;
+    protected HttpServletRequest request;
+    protected HttpServletResponse response;
+    protected HttpSession session;
+    protected UserRepository userRepository;
+    protected QuestRepository questRepository;
+    protected UserService userservice;
+    protected QuestService questService;
+    protected GameService gameService;
 
-    public BaseIT() {
+    protected BaseIT() {
         Config config = Winter.find(Config.class);
         config.fillEmptyRepository();
         request = mock(HttpServletRequest.class);

@@ -19,7 +19,7 @@ class EditUserIT extends BaseIT {
     @Test
     @DisplayName("do get redirect to edit-user")
     void doGetRedirectToListUser() {
-        User user = userservice.getAll().stream().findFirst().orElseThrow();
+        User user = userRepository.get(4L);
         when(request.getParameter(Constant.ID)).thenReturn(user.getId().toString());
         String actualRedirect = editUser.doGet(request);
         Assertions.assertEquals("edit-user", actualRedirect);
@@ -29,7 +29,7 @@ class EditUserIT extends BaseIT {
     @Test
     @DisplayName("When update changes login")
     void whenUpdateChangesLogin() {
-        User user = userservice.getAll().stream().findFirst().orElseThrow();
+        User user = userRepository.get(4L);
         when(request.getParameter(Constant.ID)).thenReturn("1");
         when(request.getSession().getAttribute(Constant.USER)).thenReturn(user);
         when(request.getParameter(Constant.LOGIN)).thenReturn("newUser");
@@ -44,14 +44,14 @@ class EditUserIT extends BaseIT {
     @Test
     @DisplayName("When user update role no changes name")
     void whenUserUpdateRoleNoChanges() {
-        User user = userservice.getAll().stream().findFirst().orElseThrow();
-        when(request.getParameter(Constant.ID)).thenReturn("1");
+        User user = userRepository.get(4L);
+        when(request.getParameter(Constant.ID)).thenReturn("4");
         when(request.getSession().getAttribute(Constant.USER)).thenReturn(user);
         when(request.getParameter(Constant.ROLE)).thenReturn(Role.ADMIN.name());
 
         editUser.doPost(request);
-        Role actualRole = userservice.getAll().stream().findFirst().orElseThrow().getRole();
-        Assertions.assertEquals("USER", actualRole.name());
+        Role actualRole = user.getRole();
+        Assertions.assertEquals("ADMIN", actualRole.name());
 
 
     }

@@ -24,12 +24,13 @@ class PlayGameIT extends BaseIT {
 
     private final PlayGame playGame = Winter.find(PlayGame.class);
 
-    @Disabled
+//    @Disabled
     @Test
     @DisplayName("When play game then redirect to play-game")
     void whenPlayGameThenRedirectToPlayGame() {
         User user = userservice.getAll().stream().findFirst().orElseThrow();
-        Quest quest = questService.getAll().stream().findFirst().orElseThrow();
+        Quest quest = questService.get(1L).orElseThrow();
+        gameService.getGame(quest.getId(), user.getId()).get();
         when(request.getSession().getAttribute(Constant.USER)).thenReturn(user);
         when(request.getParameter(Constant.QUEST_ID)).thenReturn(quest.getId().toString());
         String actualRedirect = playGame.doGet(request);
@@ -37,6 +38,8 @@ class PlayGameIT extends BaseIT {
         verify(session).setAttribute(eq(Constant.GAME), any(Game.class));
         verify(session).setAttribute(eq(Constant.QUEST), any(Quest.class));
     }
+
+//    @Disabled
     @Test
     @DisplayName("When user is null then redirect to login")
     void whenUserIsNullThenRedirectToLogin() {
@@ -45,26 +48,27 @@ class PlayGameIT extends BaseIT {
         String actualRedirect = playGame.doGet(request);
         Assertions.assertEquals(Go.LOGIN, actualRedirect);
     }
-@Disabled
+
+//    @Disabled
     @Test
     @DisplayName("When no answer is selected, then throw AppException")
     void whenNoAnswerIsSelectedThenThrowAppException() {
-        User user = userservice.getAll().stream().findFirst().orElseThrow();
-        Quest quest = questService.getAll().stream().findFirst().orElseThrow();
+        User user = userRepository.get(3L);
+        Quest quest = questService.get(2L).orElseThrow();
         Game game = gameService.getGame(quest.getId(), user.getId()).get();
         when(request.getSession().getAttribute(Constant.USER)).thenReturn(user);
         when(request.getParameter(Constant.QUEST_ID)).thenReturn(quest.getId().toString());
         when(request.getSession().getAttribute(Constant.GAME)).thenReturn(game);
         when(request.getSession().getAttribute(Constant.QUESTION)).thenReturn(quest.getQuestions().getFirst());
 
-        Assertions.assertThrows(AppException.class,() -> playGame.doPost(request));
+        Assertions.assertThrows(AppException.class, () -> playGame.doPost(request));
     }
-    @Disabled
+
     @Test
     @DisplayName("When the answer is wrong, the game is lost")
     void whenTheAnswerIsWrongTheGameIsLost() {
-        User user = userservice.getAll().stream().findFirst().orElseThrow();
-        Quest quest = questService.getAll().stream().findFirst().orElseThrow();
+            User user = userRepository.get(4L);
+        Quest quest = questService.get(2L).orElseThrow();
         Game game = gameService.getGame(quest.getId(), user.getId()).get();
         when(request.getSession().getAttribute(Constant.GAME)).thenReturn(game);
         when(request.getSession().getAttribute(Constant.QUEST)).thenReturn(quest);
@@ -75,4 +79,5 @@ class PlayGameIT extends BaseIT {
         playGame.doPost(request);
         Assertions.assertEquals(gameState, game.getGameState().name());
     }
+
 }

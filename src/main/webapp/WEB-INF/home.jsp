@@ -5,11 +5,11 @@
     <h1 class="text-center">Выберите квест</h1>
     <div class="row g-4 py-5 row-cols-1 row-cols-lg-3">
         <c:forEach var="quest" items="${requestScope.quests}">
-            <div class="feature col">
+            <div class="text-center">
                 <h3 class="fs-2">${quest.name}</h3>
                 <img id="image"
                      src="images/${quest.image}"
-                     width="150"
+                     class="img-fluid w-100"
                      alt="${quest.image}">
                 <br>
                 <p class="text-muted mb-0">${quest.description}</p>
