@@ -6,6 +6,8 @@ import com.javarush.entity.User;
 import com.javarush.exception.AppException;
 import com.javarush.util.Constant;
 import com.javarush.util.Go;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -17,6 +19,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 class SignupIT extends BaseIT {
+    private static final Logger log = LogManager.getLogger(SignupIT.class);
     private final Signup signup = Winter.find(Signup.class);
 
     @Test
@@ -27,14 +30,14 @@ class SignupIT extends BaseIT {
         when(request.getParameter(Constant.ROLE)).thenReturn("GUEST");
 
         String actualRedirect = signup.doPost(request);
-        Assertions.assertTrue(userRepository.getAll().toString().contains("newUser"));
+        Assertions.assertTrue(userRepository.getAll().toString().contains("newAdmin"));
         assertTrue(actualRedirect.startsWith(Go.PROFILE));
         verify(session).setAttribute(eq(Constant.USER), any(User.class));
     }
     @Test
     @DisplayName("When login exist throw exception")
     void WhenLoginExistThrowException() {
-        when(request.getParameter(Constant.LOGIN)).thenReturn("Carl");
+        when(request.getParameter(Constant.LOGIN)).thenReturn("Alisa");
         when(request.getParameter(Constant.PASSWORD)).thenReturn("123");
         Assertions.assertThrows(AppException.class,() -> signup.doPost(request));
     }

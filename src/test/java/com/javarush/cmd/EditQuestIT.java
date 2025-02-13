@@ -18,7 +18,7 @@ class EditQuestIT extends BaseIT {
     @Test
     @DisplayName("do get redirect to edit-quest")
     void doGetRedirectToListQuest() {
-        Quest quest = questService.get(0L).orElseThrow();
+        Quest quest = questService.get(1L).orElseThrow();
         when(request.getParameter(Constant.ID)).thenReturn(quest.getId().toString());
         String actualRedirect = editQuest.doGet(request);
         Assertions.assertEquals("edit-quest", actualRedirect);
@@ -27,7 +27,7 @@ class EditQuestIT extends BaseIT {
     @Test
     @DisplayName("When update changes name")
     void whenUpdateChangesName() {
-        Quest quest = questService.get(0L).orElseThrow();
+        Quest quest = questService.get(1L).orElseThrow();
         when(request.getParameter(Constant.ID)).thenReturn(quest.getId().toString());
         when(request.getParameter(Constant.NAME)).thenReturn("testUpdateQuest");
         when(request.getParameter(Constant.DESCRIPTION)).thenReturn("testUpdateDescription");
@@ -38,7 +38,7 @@ class EditQuestIT extends BaseIT {
         when(request.getParameter(Constant.ANSWER_LOOSE + 1)).thenReturn("testUpdateLooseAnswer");
         editQuest.doPost(request);
 
-        Quest questAfterUpdate = questService.get(0L).orElseThrow();
+        Quest questAfterUpdate = questService.get(1L).orElseThrow();
         Assertions.assertEquals("testUpdateQuest", questAfterUpdate.getName());
     }
 }

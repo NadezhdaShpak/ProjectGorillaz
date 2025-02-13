@@ -61,7 +61,7 @@ public class GameService {
     }
 
     public void checkWin(Long questionId, Long answerId, ArrayList<Question> questions, Game game, User user) {
-        if (answerId == 1 && questionId.intValue() == (questions.size() - 1)) {
+        if (answerId == 1 && questionId.intValue() == (questions.size())) {
             game.setGameState(GameState.WIN);
             user.setNumberOfWinGames(user.getNumberOfWinGames() + 1);
             userRepository.update(user);

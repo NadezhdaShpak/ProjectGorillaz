@@ -4,7 +4,6 @@ import com.javarush.BaseIT;
 import com.javarush.config.Winter;
 import com.javarush.entity.User;
 import com.javarush.repository.UserRepository;
-import com.javarush.service.UserService;
 import com.javarush.util.Constant;
 import com.javarush.util.Go;
 import org.junit.jupiter.api.Assertions;

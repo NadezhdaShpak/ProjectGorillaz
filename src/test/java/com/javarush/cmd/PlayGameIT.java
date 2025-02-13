@@ -7,6 +7,8 @@ import com.javarush.exception.AppException;
 import com.javarush.service.GameService;
 import com.javarush.util.Constant;
 import com.javarush.util.Go;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
@@ -22,14 +24,14 @@ import static org.mockito.Mockito.when;
 
 class PlayGameIT extends BaseIT {
 
+    private static final Logger log = LogManager.getLogger(PlayGameIT.class);
     private final PlayGame playGame = Winter.find(PlayGame.class);
 
-//    @Disabled
     @Test
     @DisplayName("When play game then redirect to play-game")
     void whenPlayGameThenRedirectToPlayGame() {
         User user = userservice.getAll().stream().findFirst().orElseThrow();
-        Quest quest = questService.get(1L).orElseThrow();
+        Quest quest = questService.get(2L).orElseThrow();
         gameService.getGame(quest.getId(), user.getId()).get();
         when(request.getSession().getAttribute(Constant.USER)).thenReturn(user);
         when(request.getParameter(Constant.QUEST_ID)).thenReturn(quest.getId().toString());
@@ -39,7 +41,6 @@ class PlayGameIT extends BaseIT {
         verify(session).setAttribute(eq(Constant.QUEST), any(Quest.class));
     }
 
-//    @Disabled
     @Test
     @DisplayName("When user is null then redirect to login")
     void whenUserIsNullThenRedirectToLogin() {
@@ -49,7 +50,6 @@ class PlayGameIT extends BaseIT {
         Assertions.assertEquals(Go.LOGIN, actualRedirect);
     }
 
-//    @Disabled
     @Test
     @DisplayName("When no answer is selected, then throw AppException")
     void whenNoAnswerIsSelectedThenThrowAppException() {
@@ -75,27 +75,33 @@ class PlayGameIT extends BaseIT {
         when(request.getSession().getAttribute(Constant.QUESTION)).thenReturn(quest.getQuestions().getFirst());
         when(request.getParameter(Constant.QUEST_ID)).thenReturn(quest.getId().toString());
         when(request.getParameter(Constant.ANSWER)).thenReturn("2");
-        String gameState = "LOSE";
+        String gameState = GameState.LOSE.name();
         playGame.doPost(request);
         Assertions.assertEquals(gameState, game.getGameState().name());
     }
 
     @Test
-    @DisplayName("When the answer is correct, the game is won")
+    @DisplayName("When the answer is correct, the game state is win")
     void whenTheAnswerIsCorrectTheGameIsWon() {
-        Game game = new Game();
-        User user = userRepository.get(2L);
         ArrayList<Question> questions = new ArrayList<>();
-        questions.add(new Question());
-        questions.add(new Question());
+        ArrayList<Answer> answers = new ArrayList<>();
+        answers.add(new Answer("test Answer", true, 1L));
+        questions.add(new Question("text", answers, 1L));
+        User user = userRepository.get(2L);
+        Quest quest = Quest.builder().id(5L)
+                .name("test name")
+                .author(user)
+                .questions(questions)
+                .winMessage("test Win message")
+                .looseMessage("test Loose message")
+                .description("test desc")
+                .build();
+        questService.create(quest);
+        Game game = gameService.getGame(quest.getId(), user.getId()).get();
         long numberOfWinGames = user.getNumberOfWinGames();
-        // Act
         gameService.checkWin(1L, 1L, questions, game, user);
 
-        // Assert
         assertEquals(GameState.WIN, game.getGameState());
         assertEquals(numberOfWinGames + 1, user.getNumberOfWinGames());
-
     }
-
 }

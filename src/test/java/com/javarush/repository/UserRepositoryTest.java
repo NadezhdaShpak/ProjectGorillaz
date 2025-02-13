@@ -2,6 +2,7 @@ package com.javarush.repository;
 
 import com.javarush.entity.Role;
 import com.javarush.entity.User;
+import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -10,6 +11,7 @@ import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@Log4j2
 class UserRepositoryTest {
     private final UserRepository userRepository = new UserRepository();
     private User admin;
@@ -17,7 +19,6 @@ class UserRepositoryTest {
     @BeforeEach
     void createTestAdmin() {
         admin = User.builder()
-                .id(5L)
                 .login("testAdmin")
                 .password("testPassword")
                 .role(Role.ADMIN)
@@ -27,7 +28,7 @@ class UserRepositoryTest {
 
     @Test
     void get() {
-        User user = userRepository.get(5L);
+        User user = userRepository.get(1L);
         Assertions.assertEquals(admin, user);
     }
 
@@ -43,7 +44,7 @@ class UserRepositoryTest {
     void delete() {
         long sizeBefore = userRepository.getAll().size();
         userRepository.delete(admin);
-        assertTrue(userRepository.getAll().size() == sizeBefore - 1);
+        assertEquals(userRepository.getAll().size(), sizeBefore - 1);
 
     }
 
@@ -53,6 +54,4 @@ class UserRepositoryTest {
         Stream<User> userStream = userRepository.find(pattern);
         Assertions.assertEquals(admin, userStream.findFirst().orElseThrow());
     }
-
-
 }

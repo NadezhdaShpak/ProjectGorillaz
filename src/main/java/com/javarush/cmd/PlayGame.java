@@ -75,14 +75,15 @@ public class PlayGame implements Command {
         long answerId = request.getParameter(Constant.ANSWER) == null ? 0 : Long.parseLong(request.getParameter(Constant.ANSWER));
 
         Optional<Game> game = gameService.processOneStep(gameId, currentQuestionId, answerId);
-
         Long nextQuestionId = currentQuestionId + 1;
 
-        Optional<Question> nextQuestion = reqGame.getQuest().getQuestions().stream().filter(q -> Objects.equals(q.getId(), nextQuestionId)).findFirst();
-        Question currQuestion = nextQuestion.get();
-        List<Answer> answers = (List<Answer>) currQuestion.getAnswers();
-        Collections.shuffle(answers);
-        session.setAttribute(Constant.QUESTION, new Question(currQuestion.getText(), answers, currQuestion.getId()));
+        if (nextQuestionId < reqQuest.getQuestions().size() - 1) {
+            Optional<Question> nextQuestion = reqGame.getQuest().getQuestions().stream().filter(q -> Objects.equals(q.getId(), nextQuestionId)).findFirst();
+            Question currQuestion = nextQuestion.get();
+            List<Answer> answers = (List<Answer>) currQuestion.getAnswers();
+            Collections.shuffle(answers);
+            session.setAttribute(Constant.QUESTION, new Question(currQuestion.getText(), answers, currQuestion.getId()));
+        }
         if (game.isPresent()) {
             Game currentGame = game.get();
             if (answerId == 0 && request.getParameter(Constant.GAME) != null) {

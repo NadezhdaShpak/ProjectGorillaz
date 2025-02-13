@@ -21,6 +21,8 @@ public class Config {
             userService.create(alisa);
             User bob = biuldUser("Bob", "123", Role.GUEST);
             userService.create(bob);
+            User mike = biuldUser("Mike", "321", Role.USER);
+            userService.create(mike);
 
             addDemoQuests(admin);
         }
@@ -92,7 +94,7 @@ public class Config {
 
         Collection<Answer> answers5 = new ArrayList<>();
         answers5.add(new Answer("В розовый зонтик", true, 1L));
-        answers5.add(new Answer("Во внутрений карман", false, 2L));
+        answers5.add(new Answer("Во внутренний карман", false, 2L));
         questions.add(new Question("Куда Хагрид прятал свою волшебную палочку?", answers5, 5L));
 
        questService.create(biuldQuest(name, description, author, questions, winMessage, looseMessage));

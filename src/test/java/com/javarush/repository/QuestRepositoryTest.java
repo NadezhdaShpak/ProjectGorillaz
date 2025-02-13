@@ -52,7 +52,6 @@ class QuestRepositoryTest {
     void delete() {
         questRepository.delete(testQuest);
         assertFalse(questRepository.getAll().contains(testQuest));
-
     }
 
     @Test
